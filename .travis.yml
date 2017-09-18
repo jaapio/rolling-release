@@ -41,6 +41,6 @@ deploy:
   - ''
   skip_cleanup: true
   on:
-    repo: phpDocumentor/phpDocumentor2
+    repo: jaapio/rolling-release
     tags: true
     php: 7.1
