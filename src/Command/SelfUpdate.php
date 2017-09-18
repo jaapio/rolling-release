@@ -3,6 +3,7 @@
 namespace RollingRelease\Command;
 
 use Exception;
+use Humbug\SelfUpdate\Strategy\GithubStrategy;
 use Humbug\SelfUpdate\Updater;
 use RollingRelease\Application;
 use Symfony\Component\Console\Command\Command;
@@ -24,7 +25,8 @@ final class SelfUpdate extends Command
             null,
             InputOption::VALUE_NONE,
             'Rollsback the updated binary to the last version.'
-        );
+        )
+        ->addOption('pre', 'p', InputOption::VALUE_NONE, 'Allow pre-release version update');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -46,6 +48,11 @@ final class SelfUpdate extends Command
         $updater->getStrategy()->setPackageName('jaapio/rolling-release');
         $updater->getStrategy()->setPharName('rolling-release.phar');
         $updater->getStrategy()->setCurrentLocalVersion(Application::VERSION);
+
+        $allowPreRelease = $input->getOption('pre');
+        if ($allowPreRelease) {
+            $updater->getStrategy()->setStability(GithubStrategy::ANY);
+        }
 
         try {
             if ($input->getOption('rollback')) {
