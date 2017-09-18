@@ -47,8 +47,6 @@ final class SelfUpdate extends Command
         $updater->getStrategy()->setPharName('rolling-release.phar');
         $updater->getStrategy()->setCurrentLocalVersion(Application::VERSION);
 
-        $updater->getStrategy()->setVersionUrl(self::PHAR_VERSION_URL);
-
         try {
             if ($input->getOption('rollback')) {
                 $output->writeln('Rolling back to previous version...');
