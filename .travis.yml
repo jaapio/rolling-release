@@ -5,6 +5,11 @@ sudo: false
 cache:
   directories:
   - "$HOME/.composer/cache"
+
+env:
+  github_token:
+    secure: nKPiJs07RarbOzj79jB85ZSHWDl844e8yBUuWm7O4NVuEexZfQP/xmP10p2NhqEsCTTFr8c7e+xTKnTjVLPWGT6TD3zYXwO0iPMLQ9pCUMTJ9rKk9pJXz4Y9Pd6jOuWnj18b7WeBdRz86uOtXfVc9rIu/+KQW4+2lwT/NaMH0rJ1i3pCGmbNVa+oDn+1Vz2MZBLSyel6XRGHduKNTP4KHkJzmUUkTjeCgUyTItsD0MPORuNejR1UC87d1nEjSFObr7CR3BdatOLH6ktjSirPZzKJmukv9tzWhGQ6hdmkcAtxNUywtPtbHMw6nLhaF5TFBQxRFxLAOLuubQkSI1ArNJCPhGREifQdZng2usxB6GIxpOGWtJFuJhAGbHoppd4lgUn1mBJXvwpzM+LmjkAM71qV63tKqloJYHhNBAjAZtWt47TwZOiz1CbJ0F5JyvJjg7cAFrGzPVGIoV+wOtQgNtb/Ci1nzT7NsPaUyY155FlDJg+jT5orSbPOkgqzcTTBj511brOrc/KLvRqpBGmlSxIwDrnFfulrmXFEzzyn1EzAvRRY4LgQhsHWsMckNnLV+9A2r2gSk3YTvGVaAc+9gx4DlSU4c1EuCpY7LWXPOf1LJj+kzY+wWQJzZPNDMGW8qow5gNi4XMA9knNhljmLKQm+UOPNpV91840FWQGoMzk=
+
 matrix:
   include:
   - php: 7.1
@@ -32,12 +37,21 @@ before_deploy:
 - wget -O box.phar ${BOX_URL}
 - php -d phar.readonly=false box.phar build
 - openssl sha1 rolling-release.phar > rolling-releas.phar.sha1
+- mkdir build
+- mv rolling-release* ./build
 deploy:
-  provider: releases
+- provider: releases
   api_key:
     secure: jNlI5Fw6+Dp96GXivxmrQNjZnCfkZWT2fCvj/oIui6HIhlmn9WRpvrANYcb9P4DGvGwuF7k64rY1nOqgUT0xgSwZWOfFZPJzfs0PVG8gmTYTcvZIPBef/rmdo6W+mMzKCFT0PAVAUJlWaQ7OsOv9VhhEzq+K3KtpULNlL0RQFlLjdXQmztm+ns1eTBd95HG4m44h1pxcebknSqIFAjwfw4EAyIpDGfu4YMJEugzrM16qLLRvrbQy32Z8CIq9UP4ifdcr9H1Bsibm1hK3D4wrQX7knApCvjzeDYNyuoLgvHqpcKRPY3OKCDGZIdizUPUlexGBjsZGkp9Iu0CnfW7MYShMDYQmt9n0gco2ahNl310Zb+z8IAwAzflkVNu0CSam6SyvVX2A1rkslDrFeCaXJqYitMbC+HYCeZyzniUgPw4Jw0FoaYiBe0Sr88ZoiYeyZNteNOa5KP38JqMaV0PzK2ZJdmXIuLQLD69WXXSQKkhXGNY5HsFeeHHjJpZ4byrPlAPBKWreTsnOfDoO7dkLDuAykeETcm7QpNGHE34bNjkaruAphxsWJ63w12cQEeqyiNfoOcGmD9/sHMSDF/jTiMlIiBAnO0sCAQT8lGnUUbRFSIju0ONodvOD2gD4oIsnHNDdWwexP/kmylN6GQpxG5ZH/uygVRQN4HTw6UI5c7A=
   file:
-    - "rolling-release.phar"
-    - "rolling-release.phar.sha1"
+  - rolling-release.phar
+  - rolling-release.phar.sha1
   on:
     repo: jaapio/rolling-release
+    tags: true
+- provider: pages
+  local_dir: build
+  skip_cleanup: true
+  github_token: "$github_token"
+  on:
+    branch: master
