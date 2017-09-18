@@ -36,7 +36,7 @@ before_deploy:
 - rm manifest.json
 - wget -O box.phar ${BOX_URL}
 - php -d phar.readonly=false box.phar build
-- openssl sha1 rolling-release.phar > rolling-releas.phar.sha1
+- openssl sha1 rolling-release.phar > rolling-release.phar.sha1
 - mkdir build
 - mv rolling-release* ./build
 deploy:
