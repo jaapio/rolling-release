@@ -44,8 +44,9 @@ deploy:
   api_key:
     secure: jNlI5Fw6+Dp96GXivxmrQNjZnCfkZWT2fCvj/oIui6HIhlmn9WRpvrANYcb9P4DGvGwuF7k64rY1nOqgUT0xgSwZWOfFZPJzfs0PVG8gmTYTcvZIPBef/rmdo6W+mMzKCFT0PAVAUJlWaQ7OsOv9VhhEzq+K3KtpULNlL0RQFlLjdXQmztm+ns1eTBd95HG4m44h1pxcebknSqIFAjwfw4EAyIpDGfu4YMJEugzrM16qLLRvrbQy32Z8CIq9UP4ifdcr9H1Bsibm1hK3D4wrQX7knApCvjzeDYNyuoLgvHqpcKRPY3OKCDGZIdizUPUlexGBjsZGkp9Iu0CnfW7MYShMDYQmt9n0gco2ahNl310Zb+z8IAwAzflkVNu0CSam6SyvVX2A1rkslDrFeCaXJqYitMbC+HYCeZyzniUgPw4Jw0FoaYiBe0Sr88ZoiYeyZNteNOa5KP38JqMaV0PzK2ZJdmXIuLQLD69WXXSQKkhXGNY5HsFeeHHjJpZ4byrPlAPBKWreTsnOfDoO7dkLDuAykeETcm7QpNGHE34bNjkaruAphxsWJ63w12cQEeqyiNfoOcGmD9/sHMSDF/jTiMlIiBAnO0sCAQT8lGnUUbRFSIju0ONodvOD2gD4oIsnHNDdWwexP/kmylN6GQpxG5ZH/uygVRQN4HTw6UI5c7A=
   file:
-  - rolling-release.phar
-  - rolling-release.phar.sha1
+  - build/rolling-release.phar
+  - build/rolling-release.phar.sha1
+  - build/rolling-release.phar.pubkey
   on:
     repo: jaapio/rolling-release
     tags: true
