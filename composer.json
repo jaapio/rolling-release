@@ -1,0 +1,21 @@
+{
+    "name": "jaapio/rolling-release",
+    "description": "Rolling release dummy project",
+    "type": "project",
+    "require": {
+        "symfony/console": "^3.3",
+        "padraic/phar-updater": "^1.0"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Jaapio",
+            "email": "jaap@ijaap.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "RollingRelease\\": "./src"
+        }
+    }
+}
