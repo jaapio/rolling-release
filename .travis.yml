@@ -7,7 +7,7 @@ cache:
   - "$HOME/.composer/cache"
 
 env:
-  github_token:
+  global:
     secure: nKPiJs07RarbOzj79jB85ZSHWDl844e8yBUuWm7O4NVuEexZfQP/xmP10p2NhqEsCTTFr8c7e+xTKnTjVLPWGT6TD3zYXwO0iPMLQ9pCUMTJ9rKk9pJXz4Y9Pd6jOuWnj18b7WeBdRz86uOtXfVc9rIu/+KQW4+2lwT/NaMH0rJ1i3pCGmbNVa+oDn+1Vz2MZBLSyel6XRGHduKNTP4KHkJzmUUkTjeCgUyTItsD0MPORuNejR1UC87d1nEjSFObr7CR3BdatOLH6ktjSirPZzKJmukv9tzWhGQ6hdmkcAtxNUywtPtbHMw6nLhaF5TFBQxRFxLAOLuubQkSI1ArNJCPhGREifQdZng2usxB6GIxpOGWtJFuJhAGbHoppd4lgUn1mBJXvwpzM+LmjkAM71qV63tKqloJYHhNBAjAZtWt47TwZOiz1CbJ0F5JyvJjg7cAFrGzPVGIoV+wOtQgNtb/Ci1nzT7NsPaUyY155FlDJg+jT5orSbPOkgqzcTTBj511brOrc/KLvRqpBGmlSxIwDrnFfulrmXFEzzyn1EzAvRRY4LgQhsHWsMckNnLV+9A2r2gSk3YTvGVaAc+9gx4DlSU4c1EuCpY7LWXPOf1LJj+kzY+wWQJzZPNDMGW8qow5gNi4XMA9knNhljmLKQm+UOPNpV91840FWQGoMzk=
 
 matrix:
@@ -52,6 +52,6 @@ deploy:
 - provider: pages
   local_dir: build
   skip_cleanup: true
-  github_token: "$github_token"
+  github_token: "$GITHUB_TOKEN"
   on:
     branch: master
