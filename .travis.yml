@@ -29,16 +29,20 @@ before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 .travis/phar-private.pem
 - ssh-add .travis/phar-private.pem
-- git config --global user.email "opensource@iijaap.nl"
-- git config --global user.name "jaapio"
+- git config --global user.email "builds@travis-ci.com"
+- git config --global user.name "Travis CI"
 - wget https://box-project.github.io/box2/manifest.json
 - BOX_URL=$(php bin/parse-manifest.php manifest.json)
 - rm manifest.json
 - wget -O box.phar ${BOX_URL}
 - php -d phar.readonly=false box.phar build
-- openssl sha1 rolling-release.phar > rolling-release.phar.sha1
+- openssl sha1 rolling-release.phar > rolling-release.phar.version
 - mkdir build
 - mv rolling-release* ./build
+- export GIT_TAG=nightly-$TRAVIS_COMMIT
+- git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!"
+- git push --quiet https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG $GIT_TAG > /dev/null 2>&1
+
 deploy:
 - provider: releases
   api_key:
@@ -46,15 +50,21 @@ deploy:
   skip_cleanup: true
   file:
   - build/rolling-release.phar
-  - build/rolling-release.phar.sha1
+  - build/rolling-release.phar.version
   - build/rolling-release.phar.pubkey
   on:
     repo: jaapio/rolling-release
     tags: true
 
-- provider: pages
-  local_dir: build
+- provider: releases
+  api_key:
+    secure: jNlI5Fw6+Dp96GXivxmrQNjZnCfkZWT2fCvj/oIui6HIhlmn9WRpvrANYcb9P4DGvGwuF7k64rY1nOqgUT0xgSwZWOfFZPJzfs0PVG8gmTYTcvZIPBef/rmdo6W+mMzKCFT0PAVAUJlWaQ7OsOv9VhhEzq+K3KtpULNlL0RQFlLjdXQmztm+ns1eTBd95HG4m44h1pxcebknSqIFAjwfw4EAyIpDGfu4YMJEugzrM16qLLRvrbQy32Z8CIq9UP4ifdcr9H1Bsibm1hK3D4wrQX7knApCvjzeDYNyuoLgvHqpcKRPY3OKCDGZIdizUPUlexGBjsZGkp9Iu0CnfW7MYShMDYQmt9n0gco2ahNl310Zb+z8IAwAzflkVNu0CSam6SyvVX2A1rkslDrFeCaXJqYitMbC+HYCeZyzniUgPw4Jw0FoaYiBe0Sr88ZoiYeyZNteNOa5KP38JqMaV0PzK2ZJdmXIuLQLD69WXXSQKkhXGNY5HsFeeHHjJpZ4byrPlAPBKWreTsnOfDoO7dkLDuAykeETcm7QpNGHE34bNjkaruAphxsWJ63w12cQEeqyiNfoOcGmD9/sHMSDF/jTiMlIiBAnO0sCAQT8lGnUUbRFSIju0ONodvOD2gD4oIsnHNDdWwexP/kmylN6GQpxG5ZH/uygVRQN4HTw6UI5c7A=
   skip_cleanup: true
-  github_token: "$GITHUB_TOKEN"
+  file:
+  - build/rolling-release.phar
+  - build/rolling-release.phar.version
+  - build/rolling-release.phar.pubkey
   on:
+    repo: jaapio/rolling-release
+    tags: false
     branch: master
