@@ -40,8 +40,10 @@ before_deploy:
 - mkdir build
 - mv rolling-release* ./build
 - export GIT_TAG=nightly-$TRAVIS_COMMIT
-- git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!"
-- git push --quiet https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG $GIT_TAG > /dev/null 2>&1
+- if [ "${TRAVIS_TAG}" != "${GIT_TAG}" ]; then
+    git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!"
+    git push --quiet https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG $GIT_TAG > /dev/null 2>&1
+  fi
 
 deploy:
 - provider: releases
@@ -55,6 +57,7 @@ deploy:
   on:
     repo: jaapio/rolling-release
     tags: true
+    condition: '$TRAVIS_TAG != $GIT_TAG'
 
 - provider: releases
   api_key:
