@@ -36,7 +36,7 @@ final class SelfUpdate extends Command
             $message .= 'The latest version can be found at ' . self::PHAR_URL;
             $output->writeln(sprintf('<error>%s</error>', $message));
             return 1;
-        } elseif (Application::VERSION === ('@' . 'package_version' . '@')) {
+        } elseif (Application::$VERSION === ('@' . 'package_version' . '@')) {
             $output->writeln('<error>Self updating has been disabled in source version.</error>');
             return 1;
         }
@@ -47,7 +47,7 @@ final class SelfUpdate extends Command
         $updater->setStrategy(Updater::STRATEGY_GITHUB);
         $updater->getStrategy()->setPackageName('jaapio/rolling-release');
         $updater->getStrategy()->setPharName('rolling-release.phar');
-        $updater->getStrategy()->setCurrentLocalVersion(Application::VERSION);
+        $updater->getStrategy()->setCurrentLocalVersion(Application::$VERSION);
 
         $allowPreRelease = $input->getOption('pre');
         if ($allowPreRelease) {
