@@ -34,6 +34,10 @@ before_deploy:
 - chmod 600 .travis/phar-private.pem
 - git config --global user.email "builds@travis-ci.com"
 - git config --global user.name "Travis CI"
+- export GIT_TAG=$(git describe --tags --exclude="*nightly*" | sed -E "s/\-[a-z0-9]+\-/-nightly-/")
+- if [ "${TRAVIS_TAG}" == "" ]; then
+    git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!";
+  fi
 - wget https://box-project.github.io/box2/manifest.json
 - BOX_URL=$(php bin/parse-manifest.php manifest.json)
 - rm manifest.json
@@ -42,10 +46,7 @@ before_deploy:
 - openssl sha1 rolling-release.phar > rolling-release.phar.version
 - mkdir build
 - mv rolling-release* ./build
-- export GIT_TAG=$(git describe --tags --exclude="*nightly*" | sed -E "s/\-[a-z0-9]+\-/-nightly-/")
-- if [ "${TRAVIS_TAG}" == "" ]; then
-    git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!";
-  fi
+
 
 deploy:
 - provider: releases
