@@ -42,7 +42,7 @@ before_deploy:
 - openssl sha1 rolling-release.phar > rolling-release.phar.version
 - mkdir build
 - mv rolling-release* ./build
-- export GIT_TAG=nightly-${TRAVIS_COMMIT:0:7}
+- export GIT_TAG=$(git describe --tags --exclude="*nightly*" | sed -E "s/\-[a-z0-9]+\-/-nightly-/")
 - if [ "${TRAVIS_TAG}" == "" ]; then
     git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!";
   fi
