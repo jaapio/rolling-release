@@ -31,9 +31,7 @@ script:
 before_deploy:
 - echo "${VERSION}" > VERSION
 - tar xvf .travis/secrets.tar -C .travis
-- eval "$(ssh-agent -s)"
 - chmod 600 .travis/phar-private.pem
-- ssh-add .travis/phar-private.pem
 - git config --global user.email "builds@travis-ci.com"
 - git config --global user.name "Travis CI"
 - wget https://box-project.github.io/box2/manifest.json
@@ -47,7 +45,6 @@ before_deploy:
 - export GIT_TAG=nightly-${TRAVIS_COMMIT:0:7}
 - if [ "${TRAVIS_TAG}" == "" ]; then
     git tag $GIT_TAG -a -m "Nightly build. Not a stable release. Expect bugs!";
-    git push --quiet https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG $GIT_TAG > /dev/null 2>&1;
   fi
 
 deploy:
